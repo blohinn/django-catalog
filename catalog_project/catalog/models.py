@@ -1,3 +1,5 @@
+from mptt.models import MPTTModel, TreeForeignKey
+
 from django.db import models
 
 
@@ -14,6 +16,18 @@ class OptionValue(models.Model):
 
     class Meta:
         unique_together = ('option_group', 'name')
+
+    def __str__(self):
+        return self.name
+
+
+class Category(MPTTModel):
+    name = models.CharField(max_length=128)
+    slug = models.SlugField(max_length=128)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+
+    class Meta:
+        verbose_name_plural = "categories"
 
     def __str__(self):
         return self.name
