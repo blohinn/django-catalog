@@ -1,0 +1,4 @@
+.idea/
+psql-data/
+__pycache__/
+env/
