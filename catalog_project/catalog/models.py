@@ -1,7 +1,9 @@
-from mptt.models import MPTTModel, TreeForeignKey
-
 from django.db import models
 from django.contrib.postgres.fields import JSONField
+
+from mptt.models import MPTTModel, TreeForeignKey
+
+from .validators import validate_product_json_options
 
 
 class OptionGroup(models.Model):
@@ -48,6 +50,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        super().clean()
+        validate_product_json_options(self.options)
 
 
 def get_product_image_path(instance, filename):
