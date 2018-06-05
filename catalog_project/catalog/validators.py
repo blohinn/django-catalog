@@ -4,8 +4,6 @@ from django.core.exceptions import ValidationError
 
 
 def validate_product_json_options(json):
-    print(json)
-
     if 'options' not in json:
         raise ValidationError(
             "Missed 'options' key in options dictionary. Please, use editor for edit product options.")

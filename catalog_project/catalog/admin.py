@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
 from mptt.admin import DraggableMPTTAdmin
 from django_admin_json_editor import JSONEditorWidget
@@ -15,6 +15,17 @@ class OptionValueInline(admin.StackedInline):
 @admin.register(OptionGroup)
 class OptionGroupAdmin(admin.ModelAdmin):
     inlines = [OptionValueInline]
+    actions = None
+
+    def save_model(self, request, obj, form, change):
+        messages.add_message(request, messages.ERROR,
+                             "If option value wasn't deleted it mean that exist product(s) with attached option value.")
+        super(OptionGroupAdmin, self).save_model(request, obj, form, change)
+
+    def delete_model(self, request, obj):
+        messages.add_message(request, messages.ERROR,
+                             "If option group wasn't deleted it mean that exist product(s) with attached option group.")
+        super(OptionGroupAdmin, self).delete_model(request, obj)
 
 
 class CategoryAdmin(DraggableMPTTAdmin):
